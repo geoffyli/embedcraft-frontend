@@ -11,173 +11,55 @@ const model = ref([
     {
         label: 'Management',
         items: [
-            {
-                label: 'Device Management', icon: 'pi pi-fw pi-car',
-                items: [
-                    {
-                        label: 'Device List',
-                        icon: 'pi pi-fw pi-list',
-                        to: '/main/deviceList'
-                    },
-                    // {
-                    //     label: 'Device Detail',
-                    //     icon: 'pi pi-fw pi-bars',
-                    //     to: '/main/deviceDetail'
-                    // }
-                ]
-            },
-            { label: 'Quota Management', icon: 'pi pi-fw pi-list', to: '/main/quota' },
-            {
-                label: 'Alarm Management',
-                icon: 'pi pi-fw pi-shield',
-                items: [
-                    {
-                        label: 'Alarm Log',
-                        icon: 'pi pi-fw pi-list',
-                        to: '/main/alarmLog'
-                    },
-                    {
-                        label: 'Alarm Management',
-                        icon: 'pi pi-fw pi-bars',
-                        to: '/main/alarmManagement'
-                    }
-                ]
-            },
+            // {
+            //     label: 'Device Management', icon: 'pi pi-fw pi-car',
+            //     items: [
+            //         {
+            //             label: 'Device List',
+            //             icon: 'pi pi-fw pi-list',
+            //             to: '/main/deviceList'
+            //         },
+            //         // {
+            //         //     label: 'Device Detail',
+            //         //     icon: 'pi pi-fw pi-bars',
+            //         //     to: '/main/deviceDetail'
+            //         // }
+            //     ]
+            // },
+            { label: 'Word Embedding Training', icon: 'pi pi-fw pi-caret-right', to: '/main/quota' },
+            { label: 'Stored Word Embeddings', icon: 'pi pi-fw pi-database', to: '/main/quota' }
+            // {
+            //     label: 'Alarm Management',
+            //     icon: 'pi pi-fw pi-shield',
+            //     items: [
+            //         {
+            //             label: 'Alarm Log',
+            //             icon: 'pi pi-fw pi-list',
+            //             to: '/main/alarmLog'
+            //         },
+            //         {
+            //             label: 'Alarm Management',
+            //             icon: 'pi pi-fw pi-bars',
+            //             to: '/main/alarmManagement'
+            //         }
+            //     ]
+            // },
         ]
     },
     {
-        label: 'Profile & Settings',
+        label: 'Settings & Instructions',
         items: [
-            { label: 'Profile', icon: 'pi pi-fw pi-user', to: '/utilities/icons' },
-            { label: 'Settings', icon: 'pi pi-fw pi-cog', to: '/main/settings' }
-        ]
-    },
-    {
-        label: 'Instructions & About',
-        items: [
+            // { label: 'Profile', icon: 'pi pi-fw pi-user', to: '/utilities/icons' },
+            { label: 'Settings', icon: 'pi pi-fw pi-cog', to: '/main/settings' },
             { label: 'Documentation', icon: 'pi pi-fw pi-book', to: '/main/documentation', badge: 'NEW' },
-            { label: 'About', icon: 'pi pi-fw pi-at', url: 'https://github.com/geoffyli', target: '_blank' }
         ]
     },
-
     // {
-    //     label: 'Pages',
-    //     icon: 'pi pi-fw pi-briefcase',
-    //     to: '/pages',
+    //     label: 'Instructions & About',
     //     items: [
-    //         {
-    //             label: 'Landing',
-    //             icon: 'pi pi-fw pi-globe',
-    //             to: '/landing'
-    //         },
-    //         {
-    //             label: 'Auth',
-    //             icon: 'pi pi-fw pi-user',
-    //             items: [
-    //                 {
-    //                     label: 'Login',
-    //                     icon: 'pi pi-fw pi-sign-in',
-    //                     to: '/auth/login'
-    //                 },
-    //                 {
-    //                     label: 'Error',
-    //                     icon: 'pi pi-fw pi-times-circle',
-    //                     to: '/auth/error'
-    //                 },
-    //                 {
-    //                     label: 'Access Denied',
-    //                     icon: 'pi pi-fw pi-lock',
-    //                     to: '/auth/access'
-    //                 }
-    //             ]
-    //         },
-    //         {
-    //             label: 'Crud',
-    //             icon: 'pi pi-fw pi-pencil',
-    //             to: '/pages/crud'
-    //         },
-    //         {
-    //             label: 'Timeline',
-    //             icon: 'pi pi-fw pi-calendar',
-    //             to: '/pages/timeline'
-    //         },
-    //         {
-    //             label: 'Not Found',
-    //             icon: 'pi pi-fw pi-exclamation-circle',
-    //             to: '/pages/notfound'
-    //         },
-    //         {
-    //             label: 'Empty',
-    //             icon: 'pi pi-fw pi-circle-off',
-    //             to: '/pages/empty'
-    //         }
+    //         { label: 'About', icon: 'pi pi-fw pi-at', url: 'https://github.com/geoffyli', target: '_blank' }
     //     ]
     // },
-    // {
-    //     label: 'Hierarchy',
-    //     items: [
-    //         {
-    //             label: 'Submenu 1',
-    //             icon: 'pi pi-fw pi-bookmark',
-    //             items: [
-    //                 {
-    //                     label: 'Submenu 1.1',
-    //                     icon: 'pi pi-fw pi-bookmark',
-    //                     items: [
-    //                         { label: 'Submenu 1.1.1', icon: 'pi pi-fw pi-bookmark' },
-    //                         { label: 'Submenu 1.1.2', icon: 'pi pi-fw pi-bookmark' },
-    //                         { label: 'Submenu 1.1.3', icon: 'pi pi-fw pi-bookmark' }
-    //                     ]
-    //                 },
-    //                 {
-    //                     label: 'Submenu 1.2',
-    //                     icon: 'pi pi-fw pi-bookmark',
-    //                     items: [{ label: 'Submenu 1.2.1', icon: 'pi pi-fw pi-bookmark' }]
-    //                 }
-    //             ]
-    //         },
-    //         {
-    //             label: 'Submenu 2',
-    //             icon: 'pi pi-fw pi-bookmark',
-    //             items: [
-    //                 {
-    //                     label: 'Submenu 2.1',
-    //                     icon: 'pi pi-fw pi-bookmark',
-    //                     items: [
-    //                         { label: 'Submenu 2.1.1', icon: 'pi pi-fw pi-bookmark' },
-    //                         { label: 'Submenu 2.1.2', icon: 'pi pi-fw pi-bookmark' }
-    //                     ]
-    //                 },
-    //                 {
-    //                     label: 'Submenu 2.2',
-    //                     icon: 'pi pi-fw pi-bookmark',
-    //                     items: [{ label: 'Submenu 2.2.1', icon: 'pi pi-fw pi-bookmark' }]
-    //                 }
-    //             ]
-    //         }
-    //     ]
-    // },
-    // {
-    //     label: 'Get Started',
-    //     items: [
-    //         {
-    //             label: 'Documentation',
-    //             icon: 'pi pi-fw pi-question',
-    //             to: '/documentation'
-    //         },
-    //         {
-    //             label: 'View Source',
-    //             icon: 'pi pi-fw pi-search',
-    //             url: 'https://github.com/primefaces/sakai-vue',
-    //             target: '_blank'
-    //         },
-    //         {
-    //             label: 'Nuxt Version',
-    //             url: 'https://github.com/primefaces/sakai-nuxt',
-    //             icon: 'pi pi-fw pi-star'
-    //         }
-    //     ]
-    // }
 ]);
 </script>
 
