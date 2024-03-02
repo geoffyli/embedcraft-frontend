@@ -26,8 +26,8 @@ const model = ref([
             //         // }
             //     ]
             // },
-            { label: 'Word Embedding Training', icon: 'pi pi-fw pi-caret-right', to: '/main/quota' },
-            { label: 'Stored Word Embeddings', icon: 'pi pi-fw pi-database', to: '/main/quota' }
+            { label: 'Word Embedding Training', icon: 'pi pi-fw pi-caret-right', to: '/main/trainingSettings' },
+            { label: 'Stored Word Embeddings', icon: 'pi pi-fw pi-database', to: '/main/storedModels' }
             // {
             //     label: 'Alarm Management',
             //     icon: 'pi pi-fw pi-shield',

@@ -50,6 +50,16 @@ const router = createRouter({
         component: () => import('@/views/Quota.vue'),
         },
         {
+          path: 'trainingSettings',
+          name: 'trainingSettings',
+        component: () => import('@/views/TrainingSettings.vue'),
+        },
+        {
+          path: 'storedModels',
+          name: 'storedModels',
+        component: () => import('@/views/StoredModels.vue')
+        },
+        {
           path: 'documentation',
           name: 'documentation',
         component: () => import('@/views/Documentation.vue'),
