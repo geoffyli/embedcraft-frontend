@@ -41,6 +41,11 @@ const last24HourMessages = ref(null);
 const quotaNum = ref(null);
 const pieData = ref(null);
 
+let selected = ref(null);
+const storedEmbeddingsTable = ref(null);
+
+
+
 const lineOptions = ref({
   plugins: {
     legend: {
@@ -181,6 +186,7 @@ onMounted(() => {
   getAlarmTrend(formatDate(startTime), formatDate(endTime), 3);
   getTop10Alarm(formatDate(startTime), formatDate(endTime));
   setChart();
+  setDatabase();
 });
 
 const getTop10Alarm = (startTime, endTime) => {
@@ -220,22 +226,24 @@ const getTop10Alarm = (startTime, endTime) => {
 };
 
 const getAlarmTrend = (startTime, endTime, interval) => {
-  let token = localStorage.getItem("token");
-  axios({
-    method: "get",
-    url: getAlarmTrendUrl + `/${startTime}` + `/${endTime}` + `/${interval}`,
-    headers: {
-      Authorization: `${token}`,
-    },
-  })
-    .then((response) => {
-      // Output the received response content
-      alarmTrendXData.value = response.data.xdata;
-      alarmTrendYData.value = response.data.series;
-    })
-    .catch((error) => {
-      console.log("Error:", error);
-    });
+  // let token = localStorage.getItem("token");
+  // axios({
+  //   method: "get",
+  //   url: getAlarmTrendUrl + `/${startTime}` + `/${endTime}` + `/${interval}`,
+  //   headers: {
+  //     Authorization: `${token}`,
+  //   },
+  // })
+  //   .then((response) => {
+  //     // Output the received response content
+  //     alarmTrendXData.value = response.data.xdata;
+  //     alarmTrendYData.value = response.data.series;
+  //   })
+  //   .catch((error) => {
+  //     console.log("Error:", error);
+  //   });
+  alarmTrendXData.value = [1, 2, 3, 4, 5]
+  alarmTrendYData.value = [1.0, 0.7, 0.5, 0.4, 0.35]
 };
 
 function formatDate(dateString) {
@@ -354,47 +362,104 @@ const updateTop10Alarm = () => {
 // };
 
 const setChart = () => {
-  let deviceStatus = null;
-  let normalNum = null;
-  let offlineNum = null;
-  let alarmNum = null;
-  let token = localStorage.getItem("token");
-  axios({
-    method: "get",
-    url: deviceStatusUrl,
-    headers: {
-      Authorization: `${token}`,
-    },
-  })
-    .then((response) => {
-      // Output the received response content
-      deviceStatus = response.data;
-      normalNum = deviceStatus[0]["value"];
-      offlineNum = deviceStatus[1]["value"];
-      alarmNum = deviceStatus[2]["value"];
-      pieData.value = {
-        labels: ["Normal", "Offline", "Alarm"],
-        datasets: [
-          {
-            data: [normalNum, offlineNum, alarmNum],
-            backgroundColor: [
-              documentStyle.getPropertyValue("--indigo-500"),
-              documentStyle.getPropertyValue("--purple-500"),
-              documentStyle.getPropertyValue("--teal-500"),
-            ],
-            hoverBackgroundColor: [
-              documentStyle.getPropertyValue("--indigo-400"),
-              documentStyle.getPropertyValue("--purple-400"),
-              documentStyle.getPropertyValue("--teal-400"),
-            ],
-          },
-        ],
-      };
-    })
-    .catch((error) => {
-      console.log("Error:", error);
-    });
+  pieData.value = {
+  datasets: [{
+    label: 'Word2Vec',
+    data: [{
+      x: 120, // Vectorsize
+      y: 70,  // Training time in seconds
+      r: 15   // epochs.
+    }, {
+      x: 40,
+      y: 130,
+      r: 10
+    }],
+    backgroundColor: 'rgb(100, 150, 132)'
+  },
+  {
+    label: 'FastText',
+    data: [{
+      x: 100, // Vectorsize
+      y: 30,  // Training time in seconds
+      r: 20   // epochs.
+    }, {
+      x: 70,
+      y: 90,
+      r: 10
+    }],
+    backgroundColor: 'rgb(200, 150, 30)'
+  }]
 };
+  // let deviceStatus = null;
+  // let normalNum = null;
+  // let offlineNum = null;
+  // let alarmNum = null;
+  // let token = localStorage.getItem("token");
+  // axios({
+  //   method: "get",
+  //   url: deviceStatusUrl,
+  //   headers: {
+  //     Authorization: `${token}`,
+  //   },
+  // })
+  //   .then((response) => {
+  //     // Output the received response content
+  //     deviceStatus = response.data;
+  //     normalNum = deviceStatus[0]["value"];
+  //     offlineNum = deviceStatus[1]["value"];
+  //     alarmNum = deviceStatus[2]["value"];
+  //     pieData.value = {
+  //       labels: ["Normal", "Offline", "Alarm"],
+  //       datasets: [
+  //         {
+  //           data: [normalNum, offlineNum, alarmNum],
+  //           backgroundColor: [
+  //             documentStyle.getPropertyValue("--indigo-500"),
+  //             documentStyle.getPropertyValue("--purple-500"),
+  //             documentStyle.getPropertyValue("--teal-500"),
+  //           ],
+  //           hoverBackgroundColor: [
+  //             documentStyle.getPropertyValue("--indigo-400"),
+  //             documentStyle.getPropertyValue("--purple-400"),
+  //             documentStyle.getPropertyValue("--teal-400"),
+  //           ],
+  //         },
+  //       ],
+  //     };
+  //   })
+  //   .catch((error) => {
+  //     console.log("Error:", error);
+  //   });
+};
+
+const setDatabase = () => {
+  storedEmbeddingsTable.value = [
+    {
+      'name' : 'A',
+      'tag' : 'Technology',
+      'time' : '02/25/2024 01:32PM',
+      'dimension' : 300,
+      'size' : '130MB',
+      'vocsize' : 35258,
+    },
+    {
+      'name' : 'B',
+      'tag' : 'Psychology',
+      'time' : '02/22/2024 10:11PM',
+      'dimension' : 450,
+      'size' : '330MB',
+      'vocsize' : 85731,
+    },
+    {
+      'name' : 'C',
+      'tag' : 'Politics',
+      'time' : '03/01/2024 07:46PM',
+      'dimension' : 150,
+      'size' : '40MB',
+      'vocsize' : 14289,
+    },
+  ]
+}
 
 // watch(
 //   layoutConfig.theme,
@@ -409,7 +474,7 @@ const setChart = () => {
 <template>
   <div class="grid">
     <!-- Top Statistics (4 cards) -->
-    <div class="col-12 lg:col-6 xl:col-3">
+    <!-- <div class="col-12 lg:col-6 xl:col-3">
       <div class="card mb-0">
         <div class="flex justify-content-between mb-3">
           <div>
@@ -447,10 +512,9 @@ const setChart = () => {
         <span class="text-green-500 font-medium"
           >Number of alarming devices</span
         >
-        <!-- <span class="text-500">since last week</span> -->
       </div>
-    </div>
-    <div class="col-12 lg:col-6 xl:col-3">
+    </div> -->
+    <!-- <div class="col-12 lg:col-6 xl:col-3">
       <div class="card mb-0">
         <div class="flex justify-content-between mb-3">
           <div>
@@ -472,8 +536,8 @@ const setChart = () => {
           >Msgs received in last 24h</span
         >
       </div>
-    </div>
-    <div class="col-12 lg:col-6 xl:col-3">
+    </div> -->
+    <!-- <div class="col-12 lg:col-6 xl:col-3">
       <div class="card mb-0">
         <div class="flex justify-content-between mb-3">
           <div>
@@ -491,16 +555,16 @@ const setChart = () => {
           >Number of quotas set in Sensonet</span
         >
       </div>
-    </div>
+    </div> -->
 
     <!-- The left column -->
     <div class="col-12 xl:col-6">
-      <!-- Pie chart -->
-      <div class="card flex flex-column align-items-center">
-        <h5 class="text-left w-full">Device Status Statistics</h5>
-        <Chart type="pie" :data="pieData"></Chart>
-      </div>
+      <!-- Training time, dataset size and vector demension statistics (bubble chart) -->
       <div class="card">
+        <h5 class="text-left w-full">Training Time Statistics</h5>
+        <Chart type="bubble" :data="pieData"></Chart>
+      </div>
+      <!-- <div class="card">
         <h5>Top 10 Alarming Device</h5>
         <Chart type="bar" :data="top10Alarm" :options="barOptions"></Chart>
         <div class="mt-3 grid">
@@ -526,16 +590,16 @@ const setChart = () => {
             @click="updateTop10Alarm"
           />
         </div>
-      </div>
+      </div> -->
     </div>
 
     <!-- The right column -->
     <div class="col-12 xl:col-6">
       <div class="card">
-        <h5>Alarm Trend</h5>
+        <h5>Loss Over Time</h5>
         <Chart type="line" :data="alarmTrendData" :options="lineOptions" />
         <!-- style="display: flex; justify-content: center;" -->
-        <div class="mt-3 grid">
+        <!-- <div class="mt-3 grid">
           <Calendar
             class="col-3"
             v-model="alarmTrendStartTime"
@@ -557,12 +621,12 @@ const setChart = () => {
             optionLabel="name"
             placeholder="Select an Interval"
           />
-        </div>
-        <div class="grid mt-2 ml-auto">
+        </div> -->
+        <!-- <div class="grid mt-4 ml-auto">
           <Button class="w-full" label="Submit" @click="updateAlarmTrend" />
-        </div>
+        </div> -->
       </div>
-      <div class="card">
+      <!-- <div class="card">
         <div class="flex align-items-center justify-content-between mb-4">
           <h5>Developor's Announcement & Log</h5>
         </div>
@@ -618,19 +682,68 @@ const setChart = () => {
             </span>
           </li>
         </ul>
+      </div> -->
+    </div>
+    <!-- Word embedding database -->
+    <div class="col-12 xl:col-12">
+      <div class="card">
+        <h5>Stored Word Embeddings</h5>
+
+        <DataTable
+          v-model:selection="selected"
+          :value="storedEmbeddingsTable"
+          :paginator="true"
+          class="p-datatable-gridlines"
+          :rows="5"
+          dataKey="id"
+          :rowHover="true"
+          responsiveLayout="scroll"
+          stripedRows
+        >
+          <template #empty> No records found. </template>
+          <template #loading> Loading devices data... Please wait. </template>
+          <!-- <Column selectionMode="multiple" headerStyle="width: 3rem"></Column> -->
+          <Column header="Name" style="min-width: 6rem">
+            <template #body="{ data }">
+              {{ data.name }}
+            </template>
+          </Column>
+          <Column header="Tag" style="min-width: 6rem">
+            <template #body="{ data }">
+              {{ data.tag }}
+            </template>
+          </Column>
+          <Column header="Time" style="min-width: 8rem">
+            <template #body="{ data }">
+              {{ data.time }}
+            </template>
+          </Column>
+          <Column header="Dimension" style="min-width: 8rem">
+            <template #body="{ data }">
+              {{ data.dimension }}
+            </template>
+          </Column>
+          <Column header="Size" style="min-width: 8rem">
+            <template #body="{ data }">
+              {{ data.size }}
+            </template>
+          </Column>
+          <Column header="Vocabulary Size" style="min-width: 8rem">
+            <template #body="{ data }">
+              {{ data.vocsize }}
+            </template>
+          </Column>
+          <Column header="Details" style="min-width: 1rem">
+            <template #body="{ data }">
+              <Button
+                label="Check"
+                class="p-button-outlined p-button-info w-full"
+                @click="modify(data)"
+              />
+            </template>
+          </Column>
+        </DataTable>
       </div>
-      <!-- <div class="px-4 py-5 shadow-2 flex flex-column md:flex-row md:align-items-center justify-content-between mb-3"
-                style="border-radius: 1rem; background: linear-gradient(0deg, rgba(0, 123, 255, 0.5), rgba(0, 123, 255, 0.5)), linear-gradient(92.54deg, #1c80cf 47.88%, #ffffff 100.01%)">
-                <div>
-                    <div class="text-blue-100 font-medium text-xl mt-2 mb-3">TAKE THE NEXT STEP</div>
-                    <div class="text-white font-medium text-5xl">Try PrimeBlocks</div>
-                </div>
-                <div class="mt-4 mr-auto md:mt-0 md:mr-0">
-                    <a href="https://www.primefaces.org/primeblocks-vue"
-                        class="p-button font-bold px-5 py-3 p-button-warning p-button-rounded p-button-raised"> Get Started
-                    </a>
-                </div>
-            </div> -->
     </div>
   </div>
 </template>
