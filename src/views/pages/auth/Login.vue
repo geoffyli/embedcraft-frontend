@@ -34,26 +34,29 @@ async function handleLogin() {
     return;
   }
   // Make the HTTP request using Axios
-  try {
-    const response = await Axios.post(loginUrl, {
-      adminName: username.value,
-      password: password.value,
-    });
+  // try {
+  //   const response = await Axios.post(loginUrl, {
+  //     adminName: username.value,
+  //     password: password.value,
+  //   });
 
-    // Handle the response as needed
-    if (response.data.loginSuccess === true) {
-      // Store the token in the local storage
-      localStorage.setItem("token", response.data.token);
-      // Redirect to the dashboard by JS
-      router.push({ name: "dashboard" });
-    } else {
-      // Redirect to the error page
-      router.push({ name: "accessdenied" });
-    }
-  } catch (error) {
-    // Handle the error
-    console.error(error);
-  }
+    // // Handle the response as needed
+    // if (response.data.loginSuccess === true) {
+    //   // Store the token in the local storage
+    //   localStorage.setItem("token", response.data.token);
+    //   // Redirect to the dashboard by JS
+    //   router.push({ name: "dashboard" });
+    // } else {
+    //   // Redirect to the error page
+    //   router.push({ name: "accessdenied" });
+    // }
+    router.push({ name: "dashboard" });
+
+
+  // } catch (error) {
+  //   // Handle the error
+  //   console.error(error);
+  // }
 }
 
 function updateUsernameValidation() {
