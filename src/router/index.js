@@ -60,6 +60,11 @@ const router = createRouter({
         component: () => import('@/views/StoredModels.vue')
         },
         {
+          path: 'modelDetail',
+          name: 'modelDetail',
+        component: () => import('@/views/ModelDetail.vue')
+        },
+        {
           path: 'documentation',
           name: 'documentation',
         component: () => import('@/views/Documentation.vue'),
