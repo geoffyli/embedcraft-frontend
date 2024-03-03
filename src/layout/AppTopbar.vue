@@ -49,6 +49,7 @@ const onLogoutClick = () => {
         })
         .catch(error => {
             // handle error as needed
+            router.push('/welcome');
             console.log(error);
         });
 };
