@@ -28,9 +28,8 @@ const alarmTrendData = computed(() => ({
     {
       label: "Alarm Trend",
       data: alarmTrendYData.value,
-      fill: true,
-      backgroundColor: "#2f4860",
-      borderColor: "#2f4860",
+      fill: false,
+      borderColor: 'rgb(75, 192, 192)',
       tension: 0.4,
     },
   ],
@@ -47,34 +46,32 @@ const storedEmbeddingsTable = ref(null);
 
 
 const lineOptions = ref({
-  plugins: {
-    legend: {
-      labels: {
-        fontColor: textColor,
+    plugins: {
+      legend: {
+        labels: {
+          color: "#495057",
+        },
       },
     },
-  },
-  scales: {
-    x: {
-      ticks: {
-        color: textColorSecondary,
+    scales: {
+      x: {
+        ticks: {
+          color: "#495057",
+        },
+        grid: {
+          color: "#ebedef",
+        },
       },
-      grid: {
-        color: surfaceBorder,
-        drawBorder: false,
-      },
-    },
-    y: {
-      ticks: {
-        color: textColorSecondary,
-      },
-      grid: {
-        color: surfaceBorder,
-        drawBorder: false,
+      y: {
+        ticks: {
+          color: "#495057",
+        },
+        grid: {
+          color: "#ebedef",
+        },
       },
     },
-  },
-});
+  });
 const barOptions = ref({
   plugins: {
     legend: {
@@ -280,65 +277,65 @@ const updateTop10Alarm = () => {
   getTop10Alarm(startTime, endTime);
 };
 
-// const applyLightTheme = () => {
-//   lineOptions.value = {
-//     plugins: {
-//       legend: {
-//         labels: {
-//           color: "#495057",
-//         },
-//       },
-//     },
-//     scales: {
-//       x: {
-//         ticks: {
-//           color: "#495057",
-//         },
-//         grid: {
-//           color: "#ebedef",
-//         },
-//       },
-//       y: {
-//         ticks: {
-//           color: "#495057",
-//         },
-//         grid: {
-//           color: "#ebedef",
-//         },
-//       },
-//     },
-//   };
-// };
+const applyLightTheme = () => {
+  lineOptions.value = {
+    plugins: {
+      legend: {
+        labels: {
+          color: "#495057",
+        },
+      },
+    },
+    scales: {
+      x: {
+        ticks: {
+          color: "#495057",
+        },
+        grid: {
+          color: "#ebedef",
+        },
+      },
+      y: {
+        ticks: {
+          color: "#495057",
+        },
+        grid: {
+          color: "#ebedef",
+        },
+      },
+    },
+  };
+};
 
-// const applyDarkTheme = () => {
-//   lineOptions.value = {
-//     plugins: {
-//       legend: {
-//         labels: {
-//           color: "#ebedef",
-//         },
-//       },
-//     },
-//     scales: {
-//       x: {
-//         ticks: {
-//           color: "#ebedef",
-//         },
-//         grid: {
-//           color: "rgba(160, 167, 181, .3)",
-//         },
-//       },
-//       y: {
-//         ticks: {
-//           color: "#ebedef",
-//         },
-//         grid: {
-//           color: "rgba(160, 167, 181, .3)",
-//         },
-//       },
-//     },
-//   };
-// };
+const applyDarkTheme = () => {
+  lineOptions.value = {
+    plugins: {
+      legend: {
+        labels: {
+          color: "#ebedef",
+        },
+      },
+    },
+    scales: {
+      x: {
+        ticks: {
+          color: "#ebedef",
+        },
+        grid: {
+          color: "rgba(160, 167, 181, .3)",
+        },
+      },
+      y: {
+        ticks: {
+          color: "#ebedef",
+        },
+        grid: {
+          color: "rgba(160, 167, 181, .3)",
+        },
+      },
+    },
+  };
+};
 
 // watch(
 //   isDarkTheme,
