@@ -33,23 +33,23 @@ const onSettingsClick = () => {
 
 const onLogoutClick = () => {
     topbarMenuActive.value = false;
-    let jwt = localStorage.getItem('token')
+    let token = localStorage.getItem('token')
     axios({
         method: 'post',
         url: logoutUrl,
         headers: {
-            Authorization: jwt
+            Authorization: token,
         }
     })
         .then(() => {
-            // On success, remove the token from localStorage and redirect as needed
+            // On success, remove the token from localStorage and redirect.
             localStorage.removeItem('token');
             console.log('logout success');
             router.push('/welcome');
         })
         .catch(error => {
             // handle error as needed
-            router.push('/welcome');
+            // router.push('/welcome');
             console.log(error);
         });
 };

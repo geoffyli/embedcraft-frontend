@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import Axios from "axios"; // Import Axios
 import { loginUrl } from "@/api/APIUrls";
 import router from "@/router";
@@ -10,67 +10,61 @@ onMounted(() => {
     setThemeAndScale();
 });
 
-const username = ref("");
+const account = ref("");
 const password = ref("");
-const showUsernameWarning = ref(false);
+const showAccountWarning = ref(false);
 const showPasswordWarning = ref(false);
-const usernameInput = ref(null);
+const accountInput = ref(null);
 const passwordInput = ref(null);
 
-let fisrtUsernameInput = true;
+let fisrtAccountInput = true;
 let fisrtPasswordInput = true;
-let usernameValid = false;
+let accountValid = false;
 let passwordValid = false;
 
 async function handleLogin() {
-  if (!(usernameValid && passwordValid)) {
-    if (!usernameValid) {
-      showUsernameWarning.value = true;
+  if (!(accountValid && passwordValid)) {
+    if (!accountValid) {
+      showAccountWarning.value = true;
     }
     if (!passwordValid) {
       showPasswordWarning.value = true;
     }
-    // Stop further execution if username or password is empty
+    // Stop further execution if account or password is empty.
     return;
   }
   // Make the HTTP request using Axios
-  // try {
-  //   const response = await Axios.post(loginUrl, {
-  //     adminName: username.value,
-  //     password: password.value,
-  //   });
+  try {
+    const response = await Axios.post(loginUrl, {
+      account: account.value,
+      password: password.value,
+    });
 
-    // // Handle the response as needed
-    // if (response.data.loginSuccess === true) {
-    //   // Store the token in the local storage
-    //   localStorage.setItem("token", response.data.token);
-    //   // Redirect to the dashboard by JS
-    //   router.push({ name: "dashboard" });
-    // } else {
-    //   // Redirect to the error page
-    //   router.push({ name: "accessdenied" });
-    // }
+    // Handle the response.
+    const token = response.headers['authorization'];
+    // Store the token in the local storage
+    localStorage.setItem("token", token);
+    // Redirect to the dashboard by JS
     router.push({ name: "dashboard" });
-
-
-  // } catch (error) {
-  //   // Handle the error
-  //   console.error(error);
-  // }
+  } catch (error) {
+    // Handle the error
+    console.error(error);
+    router.push({ name: "accessdenied" });
+  }
 }
 
-function updateUsernameValidation() {
-  if (!fisrtUsernameInput) {
-    if (username.value.trim()) {
-      showUsernameWarning.value = false;
-      usernameValid = true;
+function updateAccountValidation() {
+  if (!fisrtAccountInput) {
+    if (account.value.trim()) {
+      showAccountWarning.value = false;
+      accountValid = true;
     } else {
-      showUsernameWarning.value = true;
-      usernameValid = false;
+      showAccountWarning.value = true;
+      accountValid = false;
     }
   } else {
-    fisrtUsernameInput = false;
-    usernameValid = true;
+    fisrtAccountInput = false;
+    accountValid = true;
   }
 }
 
@@ -119,22 +113,22 @@ function updatePasswordValidation() {
 
           <div>
             <label
-              for="username"
+              for="account"
               class="block text-900 text-xl font-medium mb-2"
-              >Username</label
+              >Account</label
             >
             <InputText
-              ref="usernameInput"
-              id="username"
+              ref="accountInput"
+              id="account"
               type="text"
-              placeholder="Username"
+              placeholder="Account"
               class="w-full md:w-30rem mb-0"
               style="padding: 1rem"
-              v-model="username"
-              @input="updateUsernameValidation"
+              v-model="account"
+              @input="updateAccountValidation"
             />
-            <div class="text-red-400 text-right" v-if="showUsernameWarning">
-              Username cannot be empty.
+            <div class="text-red-400 text-right" v-if="showAccountWarning">
+              Account cannot be empty.
             </div>
 
             <label

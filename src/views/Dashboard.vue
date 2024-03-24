@@ -2,14 +2,7 @@
 import { onMounted, reactive, ref, watch, computed } from "vue";
 import { useLayout } from "@/layout/composables/layout";
 import axios from "axios";
-import {
-  deviceStatusUrl,
-  getStatisticsUrl,
-  getAlarmTrendUrl,
-  getTop10AlarmUrl,
-  getLast24HourMessagesUrl,
-  getQuotaNumUrl,
-} from "@/api/APIUrls";
+import {} from "@/api/APIUrls";
 
 const { isDarkTheme } = useLayout();
 const { layoutConfig } = useLayout();
@@ -118,109 +111,109 @@ const alarmTrendEndTime = ref(null);
 const top10AlarmStartTime = ref(null);
 const top10AlarmEndTime = ref(null);
 
-const getDeviceReport = () => {
-  let token = localStorage.getItem("token");
-  axios({
-    method: "get",
-    url: getStatisticsUrl,
-    headers: {
-      Authorization: `${token}`,
-    },
-  })
-    .then((response) => {
-      // Output the received response content
-      deviceNum.value = response.data["deviceCount"];
-      alarmDeviceNum.value = response.data["alarmCount"];
-    })
-    .catch((error) => {
-      console.log("Error:", error);
-    });
-};
+// const getDeviceReport = () => {
+//   let token = localStorage.getItem("token");
+//   axios({
+//     method: "get",
+//     url: getStatisticsUrl,
+//     headers: {
+//       Authorization: `${token}`,
+//     },
+//   })
+//     .then((response) => {
+//       // Output the received response content
+//       deviceNum.value = response.data["deviceCount"];
+//       alarmDeviceNum.value = response.data["alarmCount"];
+//     })
+//     .catch((error) => {
+//       console.log("Error:", error);
+//     });
+// };
 
-const getLast24HourMessages = () => {
-  let token = localStorage.getItem("token");
-  axios({
-    method: "get",
-    url: getLast24HourMessagesUrl,
-    headers: {
-      Authorization: `${token}`,
-    },
-  })
-    .then((response) => {
-      last24HourMessages.value = response.data;
-    })
-    .catch((error) => {
-      console.log("Error:", error);
-    });
-};
+// const getLast24HourMessages = () => {
+//   let token = localStorage.getItem("token");
+//   axios({
+//     method: "get",
+//     url: getLast24HourMessagesUrl,
+//     headers: {
+//       Authorization: `${token}`,
+//     },
+//   })
+//     .then((response) => {
+//       last24HourMessages.value = response.data;
+//     })
+//     .catch((error) => {
+//       console.log("Error:", error);
+//     });
+// };
 
-const getQuotaNumber = () => {
-  let token = localStorage.getItem("token");
-  axios({
-    method: "get",
-    url: getQuotaNumUrl,
-    headers: {
-      Authorization: `${token}`,
-    },
-  })
-    .then((response) => {
-      // Output the received response content
-      quotaNum.value = response.data;
-    })
-    .catch((error) => {
-      console.log("Error:", error);
-    });
-};
+// const getQuotaNumber = () => {
+//   let token = localStorage.getItem("token");
+//   axios({
+//     method: "get",
+//     url: getQuotaNumUrl,
+//     headers: {
+//       Authorization: `${token}`,
+//     },
+//   })
+//     .then((response) => {
+//       // Output the received response content
+//       quotaNum.value = response.data;
+//     })
+//     .catch((error) => {
+//       console.log("Error:", error);
+//     });
+// };
 
 onMounted(() => {
-  getDeviceReport();
-  getLast24HourMessages();
-  getQuotaNumber();
+  // getDeviceReport();
+  // getLast24HourMessages();
+  // getQuotaNumber();
   // Get the time of a week ago with the format yyyy-mm-dd hh:mm:ss
   let date = new Date();
   let startTime = new Date(date.getTime() - 30 * 24 * 60 * 60 * 1000);
   let endTime = new Date();
   getAlarmTrend(formatDate(startTime), formatDate(endTime), 3);
-  getTop10Alarm(formatDate(startTime), formatDate(endTime));
+  // getTop10Alarm(formatDate(startTime), formatDate(endTime));
   setChart();
   setDatabase();
 });
 
-const getTop10Alarm = (startTime, endTime) => {
-  let token = localStorage.getItem("token");
-  axios({
-    method: "get",
-    url: getTop10AlarmUrl + `/${startTime}` + `/${endTime}`,
-    headers: {
-      Authorization: `${token}`,
-    },
-  })
-    .then((response) => {
-      // Output the received response content
-      let labels = [];
-      let data = [];
-      for (let i = 0; i < response.data.length; i++) {
-        labels.push(
-          response.data[i]["deviceId"] + ", " + response.data[i]["quotaName"]
-        );
-        data.push(response.data[i]["heapValue"]);
-      }
+// const getTop10Alarm = (startTime, endTime) => {
+//   let token = localStorage.getItem("token");
+//   axios({
+//     method: "get",
+//     url: getTop10AlarmUrl + `/${startTime}` + `/${endTime}`,
+//     headers: {
+//       Authorization: `${token}`,
+//     },
+//   })
+//     .then((response) => {
+//       // Output the received response content
+//       let labels = [];
+//       let data = [];
+//       for (let i = 0; i < response.data.length; i++) {
+//         labels.push(
+//           response.data[i]["deviceId"] + ", " + response.data[i]["quotaName"]
+//         );
+//         data.push(response.data[i]["heapValue"]);
+//       }
 
-      top10Alarm.value = {
-        labels: labels,
-        datasets: [
-          {
-            backgroundColor: documentStyle.getPropertyValue("--primary-500"),
-            borderColor: documentStyle.getPropertyValue("--primary-500"),
-            data: data,
-          },
-        ],
-      };
-    })
-    .catch((error) => {
-      console.log("Error:", error);
-    });
-};
+//       top10Alarm.value = {
+//         labels: labels,
+//         datasets: [
+//           {
+//             backgroundColor: documentStyle.getPropertyValue("--primary-500"),
+//             borderColor: documentStyle.getPropertyValue("--primary-500"),
+//             data: data,
+//           },
+//         ],
+//       };
+//     })
+//     .catch((error) => {
+//       console.log("Error:", error);
+//     });
+// };
 
 const getAlarmTrend = (startTime, endTime, interval) => {
   // let token = localStorage.getItem("token");
