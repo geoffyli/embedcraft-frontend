@@ -113,21 +113,21 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     const token = localStorage.getItem('token')
-    // if (token == null) {
-    //   next({
-    //     path: '/user/login',
-    //     params: { nextUrl: to.fullPath }
-    //   })
-    // } else {
-    //   if (isTokenExpired(token)) {
-    //     next({
-    //       path: '/user/login',
-    //       params: { nextUrl: to.fullPath }
-    //     })
-    //   } else {
-    //     next()
-    //   }
-    // }
+    if (token == null) {
+      next({
+        path: '/user/login',
+        params: { nextUrl: to.fullPath }
+      })
+    } else {
+      if (isTokenExpired(token)) {
+        next({
+          path: '/user/login',
+          params: { nextUrl: to.fullPath }
+        })
+      } else {
+        next()
+      }
+    }
     next()
   }
   else {
