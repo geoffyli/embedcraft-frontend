@@ -2,23 +2,9 @@
 import axios from "axios";
 import { useToast } from "primevue/usetoast";
 import { ref, onBeforeMount } from "vue";
-import { quotaUrl } from "@/api/APIUrls";
+import { trainUrl, uploadUrl } from "@/api/APIUrls";
 
 const toast = useToast();
-
-const quotaName = ref(null);
-const quotaTable = ref(null);
-const loading = ref(false);
-const visible = ref(false);
-
-const modifyingId = ref(null);
-const modifyingName = ref(null);
-const modifyingUnit = ref(null);
-const modifyingSubject = ref(null);
-const modifyingValueKey = ref(null);
-const modifyingValueType = ref(null);
-const modifyingSnKey = ref(null);
-const modifyingReferenceValue = ref(null);
 
 const name = ref(null);
 const tag = ref(null);
@@ -33,28 +19,59 @@ const dropdownValues = ref([
 ]);
 const dropdownValue = ref(null);
 
-let selected = ref(null);
+const uploader = (event) => {
+  const files = event.files; // Get the selected files
+  const formData = new FormData();
 
-const onUpload = () => {
-    toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
+  // Append files to formData
+  files.forEach((file) => {
+    formData.append("file", file, file.name);
+  });
+
+  // Get your custom token or other header values
+  const token = localStorage.getItem("token"); // Replace with actual token retrieval logic
+
+  // Send the request with Axios
+  axios
+    .post(uploadUrl, formData, {
+      headers: {
+        // Add your custom headers here
+        Authorization: `${token}`,
+        // Any other headers you need
+      },
+    })
+    .then((response) => {
+      // Handle the response from the server
+      console.log("Upload successful");
+      localStorage.setItem("filePath", response.data['filePath'])
+      // Add any success toasts
+      toast.add({
+      severity: "success",
+      summary: "Dataset upload success",
+      life: 3000,
+    });
+    })
+    .catch((error) => {
+      // Handle any errors that occur during the upload
+      console.error("Upload failed", error);
+      // Add any error toasts or messages here
+      toast.add({
+      severity: "error",
+      summary: "Dataset upload failed!",
+      life: 3000,
+    });
+    });
 };
 
-const addQuota = () => {
+const submitTrainingSettings = () => {
   if (
     name.value == null ||
-    unit.value == null ||
-    subject.value == null ||
-    valueKey.value == null ||
-    valueType.value == null ||
-    snKey.value == null ||
-    referenceValue.value == null ||
-    name.value == "" ||
-    unit.value == "" ||
-    subject.value == "" ||
-    valueKey.value == "" ||
-    valueType.value == "" ||
-    snKey.value == "" ||
-    referenceValue.value == ""
+    tag.value == null ||
+    dropdownValue.value == null ||
+    minCount.value == null ||
+    vectorSize.value == null ||
+    windowSize.value == null ||
+    epochs.value == null
   ) {
     toast.add({
       severity: "error",
@@ -67,26 +84,26 @@ const addQuota = () => {
   let token = localStorage.getItem("token");
   axios({
     method: "post",
-    url: quotaUrl,
+    url: trainUrl,
     headers: {
       Authorization: `${token}`,
       "Content-Type": "application/json",
     },
     data: {
       name: name.value,
-      unit: unit.value,
-      subject: subject.value,
-      valueKey: valueKey.value,
-      valueType: valueType.value,
-      referenceValue: referenceValue.value,
+      tag: tag.value,
+      algorithm: dropdownValue.value,
+      minCount: minCount.value,
+      vectorSize: vectorSize.value,
+      windowSize: windowSize.value,
+      epochs: epochs.value,
       webhook: null,
-      snKey: snKey.value,
     },
   })
     .then((response) => {
       // Output the received response content
       console.log(response.data);
-      getTableData(null);
+      // getTableData(null);
       name.value = "";
       unit.value = "";
       subject.value = "";
@@ -97,158 +114,13 @@ const addQuota = () => {
       toast.add({
         severity: "success",
         summary: "Success!",
-        detail: "Add quota successfully!",
+        detail: "Training in progress!",
         life: 3000,
       });
     })
     .catch((error) => {
       console.log("Error:", error);
     });
-};
-
-const getTableData = (quotaName) => {
-  let token = localStorage.getItem("token");
-  axios({
-    method: "get",
-    url: quotaUrl,
-    headers: {
-      Authorization: `${token}`,
-      "Content-Type": "application/json",
-    },
-    params: {
-      page: 1,
-      pageSize: 1000,
-      quotaName: quotaName,
-    },
-  })
-    .then((response) => {
-      // Output the received response content
-      quotaTable.value = response.data["items"];
-    })
-    .catch((error) => {
-      console.log("Error:", error);
-    });
-};
-
-const searchTableData = () => {
-  loading.value = true;
-  getTableData(quotaName.value);
-  loading.value = false;
-};
-
-const deleteQuota = () => {
-  let success = true;
-  // Traverse the selected rows.
-  for (let key in selected["_value"]) {
-    let quotaId = selected["_value"][key]["id"];
-    let token = localStorage.getItem("token");
-    axios({
-      method: "delete",
-      url: quotaUrl + "/" + quotaId,
-      headers: {
-        Authorization: `${token}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        // Output the received response content
-        console.log(response.data);
-        getTableData(null);
-      })
-      .catch((error) => {
-        console.log("Error:", error);
-        success = false;
-      });
-  }
-  if (success) {
-    toast.add({
-      severity: "success",
-      summary: "Success!",
-      detail: "Delete quota successfully!",
-      life: 3000,
-    });
-  } else {
-    toast.add({
-      severity: "Error",
-      summary: "Error!",
-      detail: "Something went wrong!",
-      life: 3000,
-    });
-  }
-};
-
-onBeforeMount(() => {
-  getTableData(null);
-});
-
-const modify = (data) => {
-  visible.value = true;
-  modifyingId.value = data.id;
-  modifyingName.value = data.name;
-  modifyingUnit.value = data.unit;
-  modifyingSubject.value = data.subject;
-  modifyingValueKey.value = data.valueKey;
-  modifyingValueType.value = data.valueType;
-  modifyingSnKey.value = data.snKey;
-  modifyingReferenceValue.value = data.referenceValue;
-};
-
-const modifyRow = () => {
-  let success = true;
-  visible.value = false;
-  // Send request to modify the row.
-  let token = localStorage.getItem("token");
-  axios({
-    method: "put",
-    url: quotaUrl,
-    headers: {
-      Authorization: `${token}`,
-    },
-    data: {
-      id: modifyingId.value,
-      name: modifyingName.value,
-      unit: modifyingUnit.value,
-      subject: modifyingSubject.value,
-      valueKey: modifyingValueKey.value,
-      valueType: modifyingValueType.value,
-      snKey: modifyingSnKey.value,
-      webhook: null,
-      referenceValue: modifyingReferenceValue.value,
-    },
-  })
-    .then(() => {
-      for (let i = 0; i < quotaTable.value.length; i++) {
-        if (quotaTable.value[i].id == modifyingId.value) {
-          quotaTable.value[i].name = modifyingName.value;
-          quotaTable.value[i].unit = modifyingUnit.value;
-          quotaTable.value[i].subject = modifyingSubject.value;
-          quotaTable.value[i].valueKey = modifyingValueKey.value;
-          quotaTable.value[i].valueType = modifyingValueType.value;
-          quotaTable.value[i].snKey = modifyingSnKey.value;
-          quotaTable.value[i].referenceValue = modifyingReferenceValue.value;
-        }
-      }
-    })
-    .catch((error) => {
-      // Handle the error
-      console.log("Error:", error);
-      success = false;
-    });
-  if (success) {
-    toast.add({
-      severity: "success",
-      summary: "Success Message",
-      detail: "Modify successfully!",
-      life: 3000,
-    });
-  } else {
-    toast.add({
-      severity: "error",
-      summary: "Error Message",
-      detail: "Something went wrong!",
-      life: 3000,
-    });
-  }
 };
 </script>
 
@@ -295,14 +167,25 @@ const modifyRow = () => {
           </div>
           <div class="field">
             <label for="dataset">Upload Dataset</label>
-            <FileUpload id="dataset" @uploader="onUpload" :multiple="true" accept="image/*" :maxFileSize="1000000" customUpload />
-
+            <FileUpload
+              name="dataset"
+              :auto="false"
+              :customUpload="true"
+              @uploader="uploader"
+              :multiple="false"
+              accept=".txt"
+              :maxFileSize="1000000"
+            >
+              <template #empty>
+                <p>Drag and drop files to here to upload.</p>
+              </template>
+            </FileUpload>
           </div>
           <div>
             <Button
               label="Submit"
               class="mr-2 mb-2 mt-2"
-              @click="addQuota"
+              @click="submitTrainingSettings"
             ></Button>
           </div>
         </form>
