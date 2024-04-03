@@ -2,7 +2,6 @@
 import axios from "axios";
 import { useToast } from "primevue/usetoast";
 import { ref, onBeforeMount } from "vue";
-import { quotaUrl } from "@/api/APIUrls";
 
 const toast = useToast();
 

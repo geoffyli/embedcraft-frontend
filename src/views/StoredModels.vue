@@ -2,7 +2,6 @@
 import axios from 'axios';
 import { useToast } from 'primevue/usetoast';
 import { ref, onBeforeMount, onMounted } from 'vue';
-import { deviceUrl, setDeviceTagsUrl } from '@/api/APIUrls';
 
 const toast = useToast();
 
