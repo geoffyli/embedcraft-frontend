@@ -42,8 +42,10 @@ async function handleLogin() {
 
     // Handle the response.
     const token = response.headers['authorization'];
+    const userId = response.data['userId']
     // Store the token in the local storage
     localStorage.setItem("token", token);
+    localStorage.setItem("userId", userId)
     // Redirect to the dashboard by JS
     router.push({ name: "dashboard" });
   } catch (error) {

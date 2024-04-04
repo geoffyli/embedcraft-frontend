@@ -91,7 +91,11 @@ async function handleSignup() {
 
     // Store the token in the local storage
     const token = response.headers["authorization"];
+    const userId = response.data['userId']
+
     localStorage.setItem("token", token);
+    localStorage.setItem("userId", userId)
+
     // Redirect to the dashboard by router
     router.push({ name: "dashboard" });
   } catch (error) {

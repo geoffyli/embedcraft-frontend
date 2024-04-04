@@ -9,8 +9,10 @@ const loginUrl = `${baseUrl}/login`;
 const signupUrl = `${baseUrl}/signup`;
 const logoutUrl = `${baseUrl}/logout`;
 
-const uploadUrl = `${baseUrl}/upload`
-const trainUrl = `${baseUrl}/train`;
+const uploadUrl = `${baseUrl}/model/upload`
+const trainUrl = `${baseUrl}/model/train`;
+const statusUrl = `${baseUrl}/model/status`;
+
 
 
 // Export the URLs.
@@ -20,5 +22,6 @@ export {
   signupUrl,
   logoutUrl,
   uploadUrl,
-  trainUrl
+  trainUrl,
+  statusUrl
 };

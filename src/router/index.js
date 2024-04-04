@@ -25,31 +25,6 @@ const router = createRouter({
           component: () => import('@/views/Dashboard.vue'),
         },
         {
-          path: 'deviceDetail',
-          name: 'deviceDetail',
-          component: () => import('@/views/DeviceDetail.vue'),
-        },
-        {
-          path: 'deviceList',
-          name: 'deviceList',
-          component: () => import('@/views/DeviceList.vue'),
-        },
-        {
-          path: 'alarmLog',
-          name: 'alarmLog',
-          component: () => import('@/views/AlarmLog.vue'),
-        },
-        {
-          path: 'alarmManagement',
-          name: 'alarmManagement',
-          component: () => import('@/views/AlarmManagement.vue'),
-        },
-        {
-          path: 'quota',
-          name: 'quota',
-        component: () => import('@/views/Quota.vue'),
-        },
-        {
           path: 'trainingSettings',
           name: 'trainingSettings',
         component: () => import('@/views/TrainingSettings.vue'),
