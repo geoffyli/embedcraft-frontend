@@ -1,36 +1,51 @@
 <script setup>
 import axios from "axios";
+import ProgressSpinner from "primevue/progressspinner";
 import { useToast } from "primevue/usetoast";
 import { ref, onBeforeMount } from "vue";
-import { trainUrl, uploadUrl } from "@/api/APIUrls";
+import { trainUrl, uploadUrl, statusUrl } from "@/api/APIUrls";
+import { useRouter } from 'vue-router';
 
+// Use Vue router
+const router = useRouter();
+// Use Vue toast
 const toast = useToast();
+// Define flag, true: settings visible, false: settings invisible
+const flag = ref(true);
 
+// Define training argument variables
 const name = ref(null);
 const tag = ref(null);
 const minCount = ref(null);
 const vectorSize = ref(null);
 const windowSize = ref(null);
 const epochs = ref(null);
-
 const dropdownValues = ref([
   { name: "Word2Vec", code: "w2v" },
   { name: "FastText", code: "ft" },
 ]);
 const dropdownValue = ref(null);
 
+/**
+ * This function uploads the dataset file to the Spring Boot application.
+ * @param {*} event upload event
+ */
 const uploader = (event) => {
   const files = event.files; // Get the selected files
   const formData = new FormData();
-
   // Append files to formData
   files.forEach((file) => {
     formData.append("file", file, file.name);
   });
-
-  // Get your custom token or other header values
-  const token = localStorage.getItem("token"); // Replace with actual token retrieval logic
-
+  // Get token
+  const token = localStorage.getItem("token");
+  // Add the info toast
+  toast.add({
+    severity: "info",
+    summary: "Uploading!",
+    detail: "Dataset uploading!",
+    life: 3000,
+  });
   // Send the request with Axios
   axios
     .post(uploadUrl, formData, {
@@ -42,28 +57,37 @@ const uploader = (event) => {
     })
     .then((response) => {
       // Handle the response from the server
-      console.log("Upload successful");
-      localStorage.setItem("filePath", response.data['filePath'])
-      // Add any success toasts
+      console.log("Dataset file upload success!");
+      // Store the dataset file path on the cloud
+      localStorage.setItem("blobName", response.data["blobName"]);
+      // Add a success toast
       toast.add({
-      severity: "success",
-      summary: "Dataset upload success",
-      life: 3000,
-    });
+        severity: "success",
+        summary: "Success!",
+        detail: "Dataset upload success!",
+        life: 3000,
+      });
     })
     .catch((error) => {
       // Handle any errors that occur during the upload
-      console.error("Upload failed", error);
+      console.error("Dataset file upload failed.", error);
       // Add any error toasts or messages here
       toast.add({
-      severity: "error",
-      summary: "Dataset upload failed!",
-      life: 3000,
-    });
+        severity: "error",
+        summary: "Dataset upload failed!",
+        life: 3000,
+      });
     });
 };
 
+/**
+ * Submit the training setting arguments to the Spring Boot application
+ * Once the submission has been successful, it keeps querying the status of the training task 
+ */
 const submitTrainingSettings = () => {
+  /*
+  Check the validity of the form data
+  */ 
   if (
     name.value == null ||
     tag.value == null ||
@@ -76,12 +100,28 @@ const submitTrainingSettings = () => {
     toast.add({
       severity: "error",
       summary: "Invalid Content!",
-      detail: "Please fill all fields",
+      detail: "Please fill all the fields",
       life: 3000,
     });
     return;
   }
+  /*
+  Get the token and blob name from the local storage
+  */
   let token = localStorage.getItem("token");
+  let blobName = localStorage.getItem("blobName");
+  if (blobName == null) {
+    toast.add({
+      severity: "error",
+      summary: "Dataset Not Found!",
+      detail: "Please upload dataset file first!",
+      life: 3000,
+    });
+    return;
+  }
+  /*
+  Send post request
+  */
   axios({
     method: "post",
     url: trainUrl,
@@ -92,34 +132,96 @@ const submitTrainingSettings = () => {
     data: {
       name: name.value,
       tag: tag.value,
-      algorithm: dropdownValue.value,
+      algorithm: dropdownValue.value.name,
       minCount: minCount.value,
       vectorSize: vectorSize.value,
       windowSize: windowSize.value,
       epochs: epochs.value,
-      webhook: null,
+      blobName: blobName,
     },
   })
     .then((response) => {
-      // Output the received response content
-      console.log(response.data);
-      // getTableData(null);
+      // Empty the fields of the form
       name.value = "";
-      unit.value = "";
-      subject.value = "";
-      valueKey.value = "";
-      valueType.value = "";
-      snKey.value = "";
-      referenceValue.value = "";
+      tag.value = "";
+      dropdownValue.value = "";
+      minCount.value = "";
+      vectorSize.value = "";
+      windowSize.value = "";
+      epochs.value = "";
+      // Add the success toast
       toast.add({
         severity: "success",
         summary: "Success!",
         detail: "Training in progress!",
         life: 3000,
       });
+      // Remove the dataset file path in the localStorage
+      localStorage.removeItem("blobName");
+      // Save the task id in the local Storage
+      localStorage.setItem("taskId", response.data.taskId);
+      console.log("Task ID saved!");
+      // Set flag value
+      flag.value = false;
+      // Keeping querying the status
+      checkTrainingStatus();
+    })
+    .catch(function (error) {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+      }
+    });
+};
+
+/**
+ * Query the status of the training task
+ */
+const checkTrainingStatus = () => {
+  axios({
+    method: "get",
+    url: `${statusUrl}?taskId=${localStorage.getItem(
+      "taskId"
+    )}&userId=${localStorage.getItem("userId")}`,
+    headers: {
+      Authorization: `${localStorage.getItem("token")}`,
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      // Check if the status is 1 (completed)
+      if (response.data.status === 1) {
+        console.log("Training completed!")
+        // Set the flag
+        flag.value = true;
+        // Redirect to the model detail page
+        router.push('/main/modelDetail');
+      } else {
+        // The task is still in progress
+        console.log("Training in progress");
+        setTimeout(checkTrainingStatus, 3000);
+      }
     })
     .catch((error) => {
-      console.log("Error:", error);
+      // Log errors and clear the interval
+      console.error("Error checking training status", error);
+      // Set the flag
+      flag.value = true;
+      // Show the error toast
+      toast.add({
+      severity: "error",
+      summary: "Error!",
+      detail: "Error checking training status!",
+      life: 3000,
+    })
     });
 };
 </script>
@@ -127,7 +229,9 @@ const submitTrainingSettings = () => {
 <template>
   <div class="grid">
     <div class="col-12">
-      <div class="card p-fluid">
+      <Toast />
+      <!-- Training settings card -->
+      <div class="card p-fluid" v-if="flag">
         <h5>Customized Settings for Training</h5>
         <!-- Create a form -->
         <form>
@@ -174,7 +278,7 @@ const submitTrainingSettings = () => {
               @uploader="uploader"
               :multiple="false"
               accept=".txt"
-              :maxFileSize="1000000"
+              :maxFileSize="1000000000"
             >
               <template #empty>
                 <p>Drag and drop files to here to upload.</p>
@@ -189,7 +293,24 @@ const submitTrainingSettings = () => {
             ></Button>
           </div>
         </form>
-        <Toast />
+      </div>
+      <!-- Training in progress card -->
+      <div
+        class="card p-fluid"
+        v-if="!flag"
+        style="
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 80vh;
+        "
+      >
+        <ProgressSpinner
+          style="width: 150px; height: 150px"
+          strokeWidth="4"
+          animationDuration=".8s"
+          aria-label="Custom ProgressSpinner"
+        />
       </div>
     </div>
   </div>
