@@ -4,14 +4,13 @@ import ProgressSpinner from "primevue/progressspinner";
 import { useToast } from "primevue/usetoast";
 import { ref, onBeforeMount } from "vue";
 import { trainUrl, uploadUrl, statusUrl } from "@/api/APIUrls";
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
+import { trainingSettingsFlag } from "@/utils/globals";
 
 // Use Vue router
 const router = useRouter();
 // Use Vue toast
 const toast = useToast();
-// Define flag, true: settings visible, false: settings invisible
-const flag = ref(true);
 
 // Define training argument variables
 const name = ref(null);
@@ -82,12 +81,12 @@ const uploader = (event) => {
 
 /**
  * Submit the training setting arguments to the Spring Boot application
- * Once the submission has been successful, it keeps querying the status of the training task 
+ * Once the submission has been successful, it keeps querying the status of the training task
  */
 const submitTrainingSettings = () => {
   /*
   Check the validity of the form data
-  */ 
+  */
   if (
     name.value == null ||
     tag.value == null ||
@@ -162,7 +161,7 @@ const submitTrainingSettings = () => {
       localStorage.setItem("taskId", response.data.taskId);
       console.log("Task ID saved!");
       // Set flag value
-      flag.value = false;
+      trainingSettingsFlag.value = false;
       // Keeping querying the status
       checkTrainingStatus();
     })
@@ -199,11 +198,11 @@ const checkTrainingStatus = () => {
     .then((response) => {
       // Check if the status is 1 (completed)
       if (response.data.status === 1) {
-        console.log("Training completed!")
+        console.log("Training completed!");
         // Set the flag
-        flag.value = true;
+        trainingSettingsFlag.value = true;
         // Redirect to the model detail page
-        router.push('/main/modelDetail');
+        router.push("/main/modelDetail");
       } else {
         // The task is still in progress
         console.log("Training in progress");
@@ -214,14 +213,14 @@ const checkTrainingStatus = () => {
       // Log errors and clear the interval
       console.error("Error checking training status", error);
       // Set the flag
-      flag.value = true;
+      trainingSettingsFlag.value = true;
       // Show the error toast
       toast.add({
-      severity: "error",
-      summary: "Error!",
-      detail: "Error checking training status!",
-      life: 3000,
-    })
+        severity: "error",
+        summary: "Error!",
+        detail: "Error checking training status!",
+        life: 3000,
+      });
     });
 };
 </script>
@@ -231,7 +230,7 @@ const checkTrainingStatus = () => {
     <div class="col-12">
       <Toast />
       <!-- Training settings card -->
-      <div class="card p-fluid" v-if="flag">
+      <div class="card p-fluid" v-if="trainingSettingsFlag">
         <h5>Customized Settings for Training</h5>
         <!-- Create a form -->
         <form>
@@ -297,7 +296,7 @@ const checkTrainingStatus = () => {
       <!-- Training in progress card -->
       <div
         class="card p-fluid"
-        v-if="!flag"
+        v-if="!trainingSettingsFlag"
         style="
           display: flex;
           justify-content: center;
@@ -307,7 +306,7 @@ const checkTrainingStatus = () => {
       >
         <ProgressSpinner
           style="width: 150px; height: 150px"
-          strokeWidth="4"
+          strokeWidth="2"
           animationDuration=".8s"
           aria-label="Custom ProgressSpinner"
         />

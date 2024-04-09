@@ -2,6 +2,7 @@
 import axios from "axios";
 import { useToast } from "primevue/usetoast";
 import { ref, onBeforeMount } from "vue";
+import { modelDetailPrepared } from "@/utils/globals"
 
 const toast = useToast();
 
@@ -18,16 +19,6 @@ const modifyingValueKey = ref(null);
 const modifyingValueType = ref(null);
 const modifyingSnKey = ref(null);
 const modifyingReferenceValue = ref(null);
-
-const name = ref(null);
-const unit = ref(null);
-const subject = ref(null);
-const valueKey = ref(null);
-const valueType = ref(null);
-const snKey = ref(null);
-const referenceValue = ref(null);
-
-let selected = ref(null);
 
 const lossOverTimeData = ref({
   labels: [1, 2, 3, 4, 5, 6, 7],
@@ -88,63 +79,6 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <Dialog
-    v-model:visible="visible"
-    modal
-    header="Header"
-    :style="{ width: '50vw' }"
-  >
-    <div class="card p-fluid">
-      <div class="field">
-        <label for="modifyingName">Quota Name</label>
-        <InputText id="modifyingName" type="text" v-model="modifyingName" />
-      </div>
-      <div class="field">
-        <label for="modifyingUnit">Unit</label>
-        <InputText id="modifyingUnit" type="text" v-model="modifyingUnit" />
-      </div>
-      <div class="field">
-        <label for="modifyingSubject">Subject</label>
-        <InputText
-          id="modifyingSubject"
-          type="text"
-          v-model="modifyingSubject"
-        />
-      </div>
-      <div class="field">
-        <label for="modifyingValueKey">Value Key</label>
-        <InputText
-          id="modifyingValueKey"
-          type="text"
-          v-model="modifyingValueKey"
-        />
-      </div>
-      <div class="field">
-        <label for="modifyingValueType">Value Type</label>
-        <InputText
-          id="modifyingValueType"
-          type="text"
-          v-model="modifyingValueType"
-        />
-      </div>
-      <div class="field">
-        <label for="modifyingSnKey">Device Indentification Key</label>
-        <InputText id="modifyingSnKey" type="text" v-model="modifyingSnKey" />
-      </div>
-      <div class="field">
-        <label for="modifyingReferenceValue">referenceValue</label>
-        <InputText
-          id="modifyingReferenceValue"
-          type="text"
-          v-model="modifyingReferenceValue"
-        />
-      </div>
-    </div>
-    <template #footer>
-      <Button label="No" icon="pi pi-times" @click="visible = false" text />
-      <Button label="Yes" icon="pi pi-check" @click="modifyRow" autofocus />
-    </template>
-  </Dialog>
 
   <div class="grid">
     <!-- Top Statistics (4 cards) -->
@@ -266,6 +200,11 @@ onBeforeMount(() => {
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Not prepared -->
+    <div class="col-12">
+      <div class="card"></div>
     </div>
   </div>
 </template>
