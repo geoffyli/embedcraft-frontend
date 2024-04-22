@@ -13,6 +13,10 @@ const uploadUrl = `${baseUrl}/model/upload`
 const trainUrl = `${baseUrl}/model/train`;
 const statusUrl = `${baseUrl}/model/status`;
 
+const modelDetailsUrl = `${baseUrl}/model/evaluation`;
+const searchSimilarWordUrl = `${baseUrl}/model/search`;
+
+const queryModelListUrl = `${baseUrl}/model/query`;
 
 
 // Export the URLs.
@@ -23,5 +27,8 @@ export {
   logoutUrl,
   uploadUrl,
   trainUrl,
-  statusUrl
+  statusUrl,
+  modelDetailsUrl,
+  searchSimilarWordUrl,
+  queryModelListUrl
 };
