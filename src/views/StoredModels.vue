@@ -12,10 +12,6 @@ const toast = useToast();
 
 const modelTable = ref(null);
 const loading = ref(false);
-const visible = ref(false);
-
-const modifyingId = ref(null);
-const modifyingtags = ref(null);
 
 let selected = ref(null);
 const name = ref(null);
@@ -44,23 +40,12 @@ const getTableData = (name, tag) => {
     });
 };
 
-// const searchTableData = () => {
-//     loading.value = true;
-//     getTableData(id.value, tag.value);
-
-//     loading.value = false;
-// };
-
 onBeforeMount(() => {
   getTableData(null, null);
 });
 
-// onMounted(() => {
-//   setDatabase();
-// });
-
 const check = (data) => {
-  localStorage.setItem("modelId", data.modelId)
+  localStorage.setItem("taskId", data.modelId)
   // Redirect to the model detail page
   router.push("/main/modelDetail");
 };

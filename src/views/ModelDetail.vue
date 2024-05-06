@@ -184,6 +184,7 @@ const searchSimilarWords = () => {
     });
     return;
   }
+  similarWords.value = null;
   /*
   Get the token and blob name from the local storage
   */

@@ -2,50 +2,41 @@
 import { ref } from "vue";
 const msgProcessingPhases = ref([
   {
-    obj: "Device (Sensor)",
-    caption: "The component that sends messages",
-    icon: "pi pi-car",
+    obj: "Dataset Collection",
+    caption: "Collecting and preparing the training data",
+    icon: "pi pi-database",
     color: "#9C27B0",
     content:
-      "The device collects data from the environment and sends it to the broker.",
+      "Gather and preprocess textual data for training custom word embeddings. \
+      This includes tasks like text cleaning, tokenization, and dataset splitting.",
   },
   {
-    obj: "EMQ X",
-    caption: "The broker between devices and Sensonet",
-    icon: "pi pi-sort-alt",
+    obj: "Training Model",
+    caption: "Training the customized word embeddings model",
+    icon: "pi pi-cog",
     color: "#673AB7",
     content:
-      "EMQX receives messages from devices and sends them to Sensonet. \
-      EMQ X can support large-scale connections, even up to millions of devices, maintaining stability and making it suitable for IoT ecosystems with a vast number of devices.",
+      "Choose and configure a suitable algorithm for training word embeddings, such as Word2Vec or FastText. \
+      Train the model on the prepared dataset to generate word vectors.",
   },
   {
-    obj: "Sensonet",
-    caption: "The platform layer that manages data from devices",
-    icon: "pi pi-code",
+    obj: "Model Evaluation",
+    caption: "Evaluating the trained word embeddings model",
+    icon: "pi pi-chart-line",
     color: "#FF9800",
     content:
-      "Senonet manages data from devices as a MQTT client. \
-      It subscribes certain topics and analyzes relevant messages published by the devices \
-      with the quota rules and the corresponding alarm rules. \
-      It also provides a web interface for users to view and manage the data.",
+      "Evaluate the quality of the trained word embeddings by checking the similarity and analogy tests. \
+      Fine-tune hyperparameters to optimize performance.",
   },
   {
-    obj: "User / Third-party System",
-    caption: "The client of Sensonet",
+    obj: "Integration and Usage",
+    caption: "Integrating and using the word embeddings",
     icon: "pi pi-check",
     color: "#607D8B",
     content:
-      "Users can view and manage the data through the web interface. \
-      Third-party systems can also access the data through the API provided by Sensonet. \
-      The API is based on the RESTful architecture.",
+      "Integrate the trained word embeddings into NLP applications such as text classification, clustering, and semantic analysis. \
+      Monitor the performance and update the model as needed.",
   },
-]);
-
-const events = ref([
-  "Get the message",
-  "Analyze with quota rules",
-  "Analyze with alarm rules",
-  "Done",
 ]);
 </script>
 
@@ -59,85 +50,103 @@ const events = ref([
       <div class="card">
         <h5>Introduction</h5>
         <p>
-          Sensonet is an all-in-one Iot platform layer solution for managing Iot
-          devices, their messages and alarms based on the
+          EmbedCraft is an advanced platform designed for managing customized
+          word embeddings. It provides tools to collect training datasets, train
+          models, and evaluate the quality of word embeddings using cutting-edge
+          algorithms such as
           <a
-            href="https://mqtt.org/"
+            href="https://radimrehurek.com/gensim/models/word2vec.html"
             target="_blank"
             class="font-medium text-primary hover:underline"
-            >MQTT</a
-          >, the standard messaging protocol for the Internet of Things (IoT).
-          It acts as a special client that subscribes certain topics and
-          analyzes relevant messages published by the devices.
+            >Word2Vec</a
+          >
+          and
+          <a
+            href="https://fasttext.cc/"
+            target="_blank"
+            class="font-medium text-primary hover:underline"
+            >FastText</a
+          >. It acts as a centralized solution for developing, evaluating, and
+          deploying word embeddings in various NLP applications.
         </p>
 
-        <h5>Views</h5>
+        <h5>Features</h5>
         <p>
-          Sensonet consists of serveral views with different layout so that you
-          navigate to the corresponding module and get the job done.
+          EmbedCraft consists of several modules with different functionalities
+          to help you get the job done.
         </p>
         <ul class="line-height-3">
           <li>
-            <span class="text-primary font-medium">Dashboard</span>: It presents
-            the critical infomation of the system to be aware of.
+            <span class="text-primary font-medium">Dashboard</span>: Presents
+            critical information about the word embeddings models and their
+            performance.
           </li>
           <li>
-            <span class="text-primary font-medium">Device Management</span>: It
-            provides functions to view, search and modify devices.
+            <span class="text-primary font-medium">Training Settings</span>:
+            Provides functions to configure, start, and monitor the training of
+            word embeddings models.
           </li>
           <li>
-            <span class="text-primary font-medium">Quota Management</span>: It
-            provides functions to view, add, search, modify and delete quotas.
+            <span class="text-primary font-medium">Stored Models</span>: Offers
+            functionalities to view, search, and manage the stored models.
           </li>
           <li>
-            <span class="text-primary font-medium">Alarm Log</span>: It provides
-            a list to view the alarm log.
+            <span class="text-primary font-medium">Model Details</span>:
+            Displays detailed information and evaluation metrics of a specific
+            word embeddings model.
           </li>
           <li>
-            <span class="text-primary font-medium">Alarm Management</span>: It
-            provides functions to view, add, search, modify and delete alarm
-            records.
+            <span class="text-primary font-medium">Documentation</span>:
+            Comprehensive documentation covering how to utilize the features of
+            EmbedCraft effectively.
           </li>
           <li>
-            <span class="text-primary font-medium">Settings</span>: The theme
-            settings of the system.
+            <span class="text-primary font-medium">Settings</span>: Customize
+            system-wide settings such as theme, font size, and layout.
           </li>
         </ul>
       </div>
 
       <div class="card">
         <h5>Key Concepts</h5>
-        <ul class="line-height-3">
-          <li>
-            <div class="text-orange-500 font-medium">Device</div>
-            <p>
-              The Iot devices (sensors) which are pieces of hardware that detect
-              changes in an environment, then collect and send data as messages.
-            </p>
-          </li>
-          <li>
-            <div class="text-orange-500 font-medium">Quota</div>
-            <p>
-              A quota is a specific type of data that is represented by the same
-              filed in a message. Such as temperature, humidity, etc.
-            </p>
-          </li>
-          <li>
-            <div class="text-orange-500 font-medium">Alarm Rule</div>
-            <p>
-              Alarm rules are set based on quotas. It defines when the value of
-              the corresponding quota in the message is abnormal, that is, in
-              alarm.
-            </p>
-          </li>
-          <li>
-            <div class="text-orange-500 font-medium">Alarm Log</div>
-            <p>
-              An alarm log record is created when the value of the corresponding
-              quota in the message is abnormal.
-            </p>
-          </li>
-        </ul>
+<ul class="line-height-3">
+  <li>
+    <div class="text-orange-500 font-medium">Dataset</div>
+    <p>
+      A collection of textual data used for training customized word embeddings. 
+      Datasets must be cleaned, preprocessed, and tokenized before training.
+    </p>
+  </li>
+  <li>
+    <div class="text-orange-500 font-medium">Algorithm</div>
+    <p>
+      The technique used for training word embeddings, such as Word2Vec or FastText. 
+      Each algorithm has its own strengths and is suitable for different types of data and tasks.
+    </p>
+  </li>
+  <li>
+    <div class="text-orange-500 font-medium">Training Settings</div>
+    <p>
+      Configurable parameters that control how the word embeddings model is trained. 
+      Examples include vector size, window size, number of epochs, and learning rate.
+    </p>
+  </li>
+  <li>
+    <div class="text-orange-500 font-medium">Model Evaluation</div>
+    <p>
+      The process of assessing the quality of trained word embeddings models. 
+      This includes similarity and analogy tests to verify that the model captures meaningful semantic relationships.
+    </p>
+  </li>
+  <li>
+    <div class="text-orange-500 font-medium">Stored Models</div>
+    <p>
+      A collection of trained word embeddings models that can be retrieved and used in various NLP applications. 
+      Models can be managed, downloaded, and integrated into downstream tasks.
+    </p>
+  </li>
+</ul>
+
 
         <h5>Workflow</h5>
         <Timeline
@@ -167,17 +176,6 @@ const events = ref([
                 </p>
               </template>
             </Card>
-          </template>
-        </Timeline>
-      </div>
-
-      <div class="card">
-        <h5>Message Processing Flow</h5>
-
-        <Timeline :value="events" layout="horizontal" align="alternate">
-          <template #opposite> &nbsp; </template>
-          <template #content="slotProps">
-            {{ slotProps.item }}
           </template>
         </Timeline>
       </div>

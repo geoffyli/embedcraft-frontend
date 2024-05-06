@@ -23,7 +23,7 @@ onMounted(() => {
       >
         <span
           class="text-900 font-medium text-4xl line-height-4 mr-8 text-white"
-          >SENSONET</span
+          >EmbedCraft</span
         >
       </div>
 
@@ -47,11 +47,10 @@ onMounted(() => {
       >
         <div class="mx-4 md:mx-8 mt-0 md:mt-4">
           <h1 class="text-6xl font-bold text-gray-900 line-height-2">
-            <span class="font-light block">Connect everything.</span>Iot
-            Platform Layer Slution
+    A System for Managing Word Embeddings
           </h1>
           <p class="font-normal text-2xl line-height-3 md:mt-3 text-gray-700">
-            Manage all your Iot devices, messages and alarm-tracks just in one
+            Manage all your word embeddings, train and store them in one
             platform, with your brilliant inspiration...
           </p>
           <router-link to="/user/login">
@@ -70,13 +69,7 @@ onMounted(() => {
             ></Button>
           </router-link>
         </div>
-        <div class="flex justify-content-center md:justify-content-end mt-2">
-          <img
-            src="/src/assets/images/welcome/dashboard_img.jpg"
-            alt="Hero Image"
-            class="w-9 md:w-auto"
-            style="border-radius: 4%"
-          />
+        <div class="flex justify-content-center md:justify-content-end mt-8">
         </div>
       </div>
 
@@ -149,7 +142,7 @@ onMounted(() => {
                   <i class="pi pi-fw pi-palette text-2xl text-cyan-700"></i>
                 </div>
                 <h5 class="mb-2 text-900">Fresh Design</h5>
-                <span class="text-600">Artist's flat design.</span>
+                <span class="text-600">Artist's minimal design.</span>
               </div>
             </div>
           </div>
@@ -406,24 +399,15 @@ onMounted(() => {
             <div
               class="flex flex-column justify-content-center align-items-center text-center px-3 py-3 md:py-0"
             >
-              <h3 class="text-gray-900 mb-2">About the Author</h3>
-              <span class="text-gray-600 text-2xl">Yulong Li</span>
+              <h3 class="text-gray-900 mb-2">About the Authors</h3>
+              <span class="text-gray-600 text-2xl">Geoff Li, Yuchen Mao, Enling Cao, Yujia Li & Yixiao Li</span>
               <p
                 class="text-gray-900 sm:line-height-2 md:line-height-4 text-2xl mt-4"
                 style="max-width: 800px"
               >
-                Senior Student of Computer Science and Software Engineering,
-                CQUPT & UAlbany, being intreasted in web development, data
+                Senior Students majoring in Computer Science, University at Albany, being intreasted in web development, data
                 science and machine learning.
               </p>
-              <a href="https://github.com/geoffyli" target="_blank">
-                <img
-                src="/src/assets/images/welcome/avator.jpg"
-                class="mt-4"
-                alt="Avator"
-                style="border-radius: 50%"
-              />
-              </a>
             </div>
           </div>
         </div>
